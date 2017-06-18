@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "jsx": "preserve",
+        "target": "es6",
+        "noImplicitAny": false,
+        "experimentalDecorators": true,
+        "preserveConstEnums": true,
+        "outDir": "build",
+        "skipDefaultLibCheck": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "noResolve": false,
+        "allowJs": true,
+        "rootDir": "src",
+        "moduleResolution": "node",
+        "noUnusedParameters": true,
+        "noUnusedLocals": false,
+        "baseUrl": "."
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
