@@ -24,19 +24,9 @@ class Socket {
             connection.onopen = () => console.debug("Connection is opened");
             connection.onclose = () => console.debug("Connection is closed");
             connection.onmessage = onMessage;
-
-            setTimeout(this.sendNumber, 10000);
         } else {
             // The browser doesn't support WebSocket
             alert("WebSocket NOT supported by your Browser!");
-        }
-    }
-
-    static sendNumber() {
-        if (connection.readyState === connection.OPEN) {
-            console.log("attempt to send", connection)
-            var number = Math.round(Math.random() * 0xFFFFFF);
-            connection.send(number.toString());
         }
     }
 }
