@@ -1,8 +1,23 @@
-import socket from './utils/socket';
+import serverSocket from './utils/socket';
+import quoteFeedConnector from './quotefeed/connector';
+import quoteFeedHandlers from './quotefeed/handlers';
+import quoteFeedCollector from './quotefeed/collector';
+import quoteFeedStrategy from './quotefeed/strategy';
 import config from './config';
 
-let messageReceivedHandler = (connection, message) => {
-    connection.send(message);
-};
+const serverCfg = config.server;
+const quoteFeedCfg = config.quoteFeed;
 
-socket.init(config.ws, messageReceivedHandler);
+const serverSocketHandlers = {
+    onRequest: (connection, message) => {
+        connection.send(JSON.stringify(quoteFeedCollector.getQuotes()));
+        quoteFeedStrategy.init(connection);
+    },
+    onMessage: (connection, message) => {
+        connection.send(message);
+    }
+}
+
+serverSocket.init(serverCfg, serverSocketHandlers);
+quoteFeedHandlers.init(quoteFeedCfg);
+quoteFeedConnector.init(quoteFeedCfg, quoteFeedHandlers.getHandlers());

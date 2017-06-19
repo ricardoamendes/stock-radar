@@ -16,10 +16,10 @@ export default class Socket {
      * Initializes web socket server.
      *
      * @param  {String}   config    Socket connection config
-     * @param  {Function} onMessage Handle messages received from clients
+     * @param  {Object}   handlers  List of connection handlers
      * @return {void}
      */
-    static init(config, onMessage) {
+    static init(config, handlers) {
 
         // Initializes server and web socket connection
         server = new WebSocketServer({
@@ -39,17 +39,17 @@ export default class Socket {
 
             // Initiate a connection request
             connection = request.accept('echo-protocol', request.origin);
-
-            this.initConnection(connection, onMessage);
+            this.initConnection(connection, handlers);
+            handlers.onRequest(connection);
         });
     }
 
-    static initConnection(connection, onMessage) {
+    static initConnection(connection, handlers) {
         let {print} = this;
         print(`${new Date()} Connection accepted`);
         connection.on('message', function (message) {
             print(`Received Message: ${message.utf8Data}`);
-            onMessage(connection, message.utf8Data);
+            handlers.onMessage(connection, message.utf8Data);
         });
         connection.on('close', (reasonCode, description) => print(`${new Date()} Peer ${connection.remoteAddress} disconnected`));
     }
