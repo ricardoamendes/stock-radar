@@ -9,7 +9,7 @@ const getPlugins = () => {
     var plugins = [];
     plugins.push(new webpack.EnvironmentPlugin({NODE_ENV: process.env.NODE_ENV, DEBUG: dev}));
     plugins.push(new HtmlWebpackInlineSourcePlugin());
-    //plugins.push(new CopyWebpackPlugin([{ from: 'list.json' }]));
+    //plugins.push(new CopyWebpackPlugin([{ from: path.resolve(__dirname, './src/client/app/sw.js') }]));
     plugins.push(new HtmlWebpackPlugin({
         template: __dirname + '/src/client/index.html',
         filename: 'index.html',

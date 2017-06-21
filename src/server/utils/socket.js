@@ -1,9 +1,17 @@
 // socket.js
 
-var WebSocketServer = require('websocket').server;
-var http = require('http');
+const WebSocketServer = require('websocket').server;
+const fs = require('fs');
 
-let dev = process.env.NODE_ENV === 'development';
+const sslCfg = {
+    ssl: true,
+    port: 8001,
+    ssl_key: '/etc/nginx/ssl/www.ricardoamendes.com.key',
+    ssl_cert: '/etc/nginx/ssl/www.ricardoamendes.com.crt'
+};
+const dev = process.env.NODE_ENV === 'development';
+const http = dev ? require('http') : require('https');
+
 let server;
 let connection;
 
@@ -20,19 +28,25 @@ export default class Socket {
      * @return {void}
      */
     static init(config, handlers) {
+        let httpServer;
+        if (dev) {
+            httpServer = http.createServer();
+        } else {
+            httpServer = http.createServer({
+                key: fs.readFileSync(sslCfg.ssl_key),
+                cert: fs.readFileSync(sslCfg.ssl_cert)
+            });
+        }
 
         // Initializes server and web socket connection
         server = new WebSocketServer({
-            httpServer: http
-                .createServer()
-                .listen(config.port),
-            autoAcceptConnections: false
+            httpServer: httpServer.listen(config.port)
         });
 
         // Listens when a client connects for the first time
         server.on('request', (request) => {
             // Make sure to accept requests from an allowed origin
-            if (!this.originIsAllowed(config.host, request.origin)) {
+            if (!this.originIsAllowed(dev ? config.locahost : config.remotehost, request.origin)) {
                 request.reject();
                 return;
             }
@@ -65,8 +79,8 @@ export default class Socket {
     }
 
     static print(message) {
-        if (dev) {
-            console.log(message);
-        }
+        //if (dev) {
+        console.log(message);
+        //}
     }
 }
