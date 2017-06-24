@@ -3,12 +3,6 @@
 const WebSocketServer = require('websocket').server;
 const fs = require('fs');
 
-const sslCfg = {
-    ssl: true,
-    port: 8001,
-    ssl_key: '/etc/nginx/ssl/www.ricardoamendes.com.key',
-    ssl_cert: '/etc/nginx/ssl/www.ricardoamendes.com.crt'
-};
 const dev = process.env.NODE_ENV === 'development';
 const http = dev ? require('http') : require('https');
 
@@ -33,8 +27,8 @@ export default class Socket {
             httpServer = http.createServer();
         } else {
             httpServer = http.createServer({
-                key: fs.readFileSync(sslCfg.ssl_key),
-                cert: fs.readFileSync(sslCfg.ssl_cert)
+                key: fs.readFileSync(config.ssl.key),
+                cert: fs.readFileSync(config.ssl.cert)
             });
         }
 
@@ -46,7 +40,7 @@ export default class Socket {
         // Listens when a client connects for the first time
         server.on('request', (request) => {
             // Make sure to accept requests from an allowed origin
-            if (!this.originIsAllowed(dev ? config.locahost : config.remotehost, request.origin)) {
+            if (!this.originIsAllowed(dev ? config.localhost : config.remotehost, request.origin)) {
                 request.reject();
                 return;
             }

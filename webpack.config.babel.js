@@ -9,7 +9,11 @@ const getPlugins = () => {
     var plugins = [];
     plugins.push(new webpack.EnvironmentPlugin({NODE_ENV: process.env.NODE_ENV, DEBUG: dev}));
     plugins.push(new HtmlWebpackInlineSourcePlugin());
-    //plugins.push(new CopyWebpackPlugin([{ from: path.resolve(__dirname, './src/client/app/sw.js') }]));
+    plugins.push(new CopyWebpackPlugin([ 
+        { from: path.resolve(__dirname, './manifest.json') },
+        { from: path.resolve(__dirname, './service-worker.js') },
+        { from: path.resolve(__dirname, './src/client/images'), to: path.resolve(__dirname, './dist/images') }
+    ]));
     plugins.push(new HtmlWebpackPlugin({
         template: __dirname + '/src/client/index.html',
         filename: 'index.html',
