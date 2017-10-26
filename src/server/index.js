@@ -21,3 +21,11 @@ const serverSocketHandlers = {
 serverSocket.init(serverCfg, serverSocketHandlers);
 quoteFeedHandlers.init(quoteFeedCfg);
 quoteFeedConnector.init(quoteFeedCfg, quoteFeedHandlers.getHandlers());
+
+// var googleFinance = require('google-finance');
+
+// googleFinance.companyNews({
+//   symbol: 'NASDAQ:AAPL'
+// }, function (err, news) {
+//   console.log(news)
+// });

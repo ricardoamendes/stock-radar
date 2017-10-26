@@ -11,7 +11,7 @@ const getPlugins = () => {
     plugins.push(new HtmlWebpackInlineSourcePlugin());
     plugins.push(new CopyWebpackPlugin([ 
         { from: path.resolve(__dirname, './manifest.json') },
-        { from: path.resolve(__dirname, './service-worker.js') },
+        { from: path.resolve(__dirname, './package.json') },
         { from: path.resolve(__dirname, './src/client/images'), to: path.resolve(__dirname, './dist/images') }
     ]));
     plugins.push(new HtmlWebpackPlugin({
@@ -43,7 +43,7 @@ export default[
             extensions: ['.ts', '.tsx', '.js', '.json']
         },
         output : {
-            filename: 'bundle-[hash:6].js',
+            filename: 'bundle.js',
             path: __dirname + '/dist'
         },
         module : {
